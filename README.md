@@ -3,7 +3,7 @@
 ## 📌 Solution
 
 ### 1. How much was the total revenue?
-
+We want to know the total money earned from all pizza sales. To calculate this, we sum the corrected_total_price column, which contains the revenue from each order line.
 ````sql
 SELECT SUM(corrected_total_price) AS total_revenue 
 FROM pizza_sales;
