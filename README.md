@@ -14,7 +14,7 @@ FROM pizza_sales;
 
 There was sold $881.654,30 from pizzas.
 ### 2. How much was the average order value?
-
+To calculate the average value per order, we divide the total revenue by the number of unique orders. We use COUNT(DISTINCT order_id) to ensure we count each order only once.
 ````sql
 SELECT SUM(corrected_total_price)/COUNT(DISTINCT order_id) AS average_order_value 
 FROM pizza_sales;
@@ -25,7 +25,7 @@ FROM pizza_sales;
 
 The average order value from all the pizzas sold was $41,29.
 ### 3. How many pizzas were sold?
-
+To determine the total number of pizzas sold, we sum the quantity column, which indicates how many units of each pizza were sold.
 ````sql
 SELECT SUM(quantity) AS total_pizzas_sold 
 FROM pizza_sales;
@@ -37,7 +37,7 @@ FROM pizza_sales;
 The amount of pizzas sold is 49574.
 
 ### 4. How many orders were made?
-
+To find the total number of orders, we count the distinct order_id values, ensuring each order is only counted once.
 ````sql
 SELECT COUNT(DISTINCT order_id) AS total_orders 
 FROM pizza_sales;
@@ -49,7 +49,7 @@ FROM pizza_sales;
 The amount of orders made is 21350.
 
 ### 5. How much is the average pizzas per order?
-
+To find the average number of pizzas per order, we divide the total quantity of pizzas sold by the total number of orders. We cast both values as decimals to get a precise result
 ````sql
 SELECT CAST(
     CAST(SUM(quantity) AS DECIMAL(10,2)) /
@@ -65,7 +65,7 @@ FROM pizza_sales;
 The amount of pizzas per order is 2,32.
 
 ### 6. What are the days with the most orders?
-
+To identify the busiest days of the week, we group the data by day name (DATENAME(WEEKDAY, order_date)) and count the orders for each day. Ordering by DATEPART(WEEKDAY, order_date) ensures we list days in the correct weekday sequence.
 ````sql
 SET LANGUAGE English;
 SELECT 
@@ -82,7 +82,7 @@ ORDER BY DATEPART(WEEKDAY, order_date);
 The days with most orders are Friday and Saturday.
 
 ### 7. Which hour of the day has the most amount of orders?
-
+To determine peak hours, we extract the hour from order_time and count how many orders were placed in each hour. This allows us to see which time period is busiest.
 ````sql
 SELECT 
     DATENAME(HOUR, order_time) AS order_hour, 
@@ -98,7 +98,7 @@ ORDER BY DATENAME(HOUR, order_time);
 The hour with most orders is 12pm.
 
 ### 8. Which hour of the day has the most amount of orders?
-
+To determine peak hours, we extract the hour from order_time and count how many orders were placed in each hour. This allows us to see which time period is busiest.
 ````sql
 SELECT 
     DATENAME(HOUR, order_time) AS order_hour, 
@@ -114,7 +114,7 @@ ORDER BY DATENAME(HOUR, order_time);
 The hour with most orders is 12pm.
 
 ### 9. How many orders each pizza category have?
-
+To understand sales by pizza category, we sum the corrected_total_price per category. We also calculate the percentage of each category relative to total sales in January to see which categories dominate the revenue.
 ````sql
 SELECT 
     pizza_category, 
@@ -136,7 +136,7 @@ ORDER BY percentage DESC;
 The pizza category with most orders is the classic.
 
 ### 10. Wich pizza size sells the most?
-
+Similar to category, we group by pizza_size and sum the sales. Calculating the percentage of total sales lets us identify the most popular pizza size.
 ````sql
 SELECT 
     pizza_size, 
@@ -156,29 +156,8 @@ ORDER BY percentage DESC;
 
 The pizza size with most sells is the large.
 
-### 11. Wich pizza size sells the most?
-
-````sql
-SELECT 
-    pizza_size, 
-    SUM(corrected_total_price) AS total_sales, 
-    CAST(
-        SUM(corrected_total_price) * 100.0 /
-        (SELECT SUM(corrected_total_price) FROM pizza_sales) 
-        AS DECIMAL(10,2)
-    ) AS percentage
-FROM pizza_sales
-GROUP BY pizza_size
-ORDER BY percentage DESC;
-````
-**Answer:**
-
-![Image](https://github.com/user-attachments/assets/544218bf-3e5d-4d10-b59a-46dfcd2c1be2)
-
-The pizza size with most sells is the large.
-
-### 12. Wich pizza sells the most in terms of quantity?
-
+### 11. Wich pizza sells the most in terms of quantity?
+To find the most ordered pizzas by quantity, we group by pizza_name, sum the quantities, and select the top 5. This highlights the most popular pizzas in terms of units sold.
 ````sql
 SELECT 
    TOP 5 pizza_name, 
@@ -193,8 +172,8 @@ ORDER BY total_pizzas_sold DESC;
 
 The pizza with most quantity of orders is the Classic Deluxe.
 
-### 13. Wich pizza sells the worst in terms of quantity?
-
+### 12. Wich pizza sells the worst in terms of quantity?
+Similarly, to identify the least popular pizzas, we group by pizza_name, sum the quantities, and order ascending to find the bottom 5.
 ````sql
 SELECT 
     TOP 5 
